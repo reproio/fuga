@@ -15,7 +15,6 @@ def find_experiment_root_dir(max_depth=4):
     depth = 0
 
     while True:
-        print(cur)
         if 'fuga.yml' in os.listdir(cur):
             return cur
 

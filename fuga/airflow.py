@@ -273,7 +273,8 @@ def get_kubernetes_pod_operator(
         operator_image=None,
         cmds=['python', 'main.py'],
         env_vars=None,
-        dag=None):
+        dag=None,
+        image_tag=None):
     """Get templated KubernetesPodOperator.
 
     Intended to be used with your own implementations of kuberenetes pod operator
@@ -307,13 +308,15 @@ def get_kubernetes_pod_operator(
     elif operator_image is not None:
         image = operator_image
 
+    image_tag = image_tag or 'LATEST'
+
     return KubernetesPodOperator(
         dag=dag or models._CONTEXT_MANAGER_DAG,
         task_id='{experiment_name}_{operator_name}'.format(
             experiment_name=get_config('experiment_name')
                 .replace('-', '_'),
             operator_name=operator_name.replace('-', '_')),
-        name='{experiment_name}-{operator_name}'.format(
+        name='{experiment_name}__{operator_name}:{image_tag}'.format(
             experiment_name=get_config('experiment_name').replace('_', '-'),
             operator_name=operator_name.replace('_', '-')),
         namespace='default',

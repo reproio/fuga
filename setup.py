@@ -13,7 +13,8 @@ requirements = [
     'google-cloud-resource-manager~=0.29.1',
     'cookiecutter~=1.6.0',
     'GitPython~=2.1.11',
-    'pyyaml>=4.2b1']  # pyyaml<=4.2 has a severe vulnerability
+    'pyyaml~=4.2b1',  # pyyaml<=4.2 has a severe vulnerability
+    'docker~=4.0.2']
 
 setup_requirements = []
 

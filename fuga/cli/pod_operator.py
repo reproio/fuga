@@ -4,6 +4,9 @@ import sys
 
 import click
 
+from git import Repo
+from git.exc import InvalidGitRepositoryError
+
 from cookiecutter.main import cookiecutter
 from cookiecutter.exceptions import (
     OutputDirExistsException,
@@ -16,6 +19,13 @@ from cookiecutter.exceptions import (
     RepositoryCloneFailed
 )
 
+from fuga.utils import find_experiment_root_dir
+from fuga.experiment import Experiment
+from fuga.config import get_config
+
+OPERATOR_DIR_PREFIX = os.getenv('FUGA_OPERATOR_DIR_PREFIX', 'operators')
+DEFAULT_REMOTE_CONTAINER_REPO_HOST = 'gcr.io'
+
 
 class PodOperatorNewCommand:
     # XXX: Temporary location for templates
@@ -24,22 +34,6 @@ class PodOperatorNewCommand:
 
     def __init__(self):
         pass
-
-    def find_experiment_root_dir(self, max_depth=4):
-        cur = os.getcwd()
-        depth = 0
-
-        while True:
-            if 'fuga.yml' in os.listdir(cur):
-                return cur
-
-            if depth >= max_depth:
-                raise Exception(
-                    'Current directry might not be a valid fuga experiment'
-                    'Could not find any valid fuga configuration files '
-                    '(`fuga.yml`) within working directory and its '
-                    'ancestors')
-            depth += max_depth
 
     def run(self,
             operator_name,
@@ -55,8 +49,8 @@ class PodOperatorNewCommand:
             password=None):
         output_dir = output_dir \
             or os.path.join(
-                self.find_experiment_root_dir(),
-                'operators')
+                find_experiment_root_dir(),
+                OPERATOR_DIR_PREFIX)
 
         extra_context = {
             'operator_name': operator_name
@@ -96,3 +90,74 @@ class PodOperatorNewCommand:
             )
             click.echo('Context: {}'.format(context_str))
             sys.exit(1)
+
+
+class PodOperatorDeployCommand:
+    def run(
+            self,
+            operator_name,
+            dockerfile='./Dockerfile',
+            image_name=None,
+            version_tag=None,
+            dryrun=False,
+            remote_container_repo=None):
+        import docker
+        client = docker.from_env()
+        experiment = Experiment.from_path(find_experiment_root_dir())
+
+        build_path = os.path.join(
+            experiment.root_path,
+            OPERATOR_DIR_PREFIX,
+            operator_name)
+        if not os.path.isdir(build_path):
+            raise Exception(f'{build_path} is not a directory')
+
+        try:
+            repo = Repo(find_experiment_root_dir())
+            if len(repo.head.commit.diff(None)) > 0 \
+                    or len(repo.untracked_files) > 0:
+                import sys
+                click.echo(
+                    'Current Git working tree has either '
+                    'untracked file or diff to HEAD. '
+                    'Please commit your changes/new files before '
+                    'any deployment.')
+                sys.exit(0)
+            version_hash = repo.head.commit.hexsha
+        except InvalidGitRepositoryError:
+            raise Exception(
+                f'Experiment directory ({experiment.root_path}) needs to '
+                'be a valid Git repository.\n'
+                'Run `git init` in your experiment root')
+        except ValueError as e:
+            raise Exception(
+                f'ValueError ({e}) has occured.\n'
+                'Current Git repository might not have any commit.')
+
+        image_name = image_name or f'{experiment.name}__{operator_name}'
+        version_tag = version_tag or version_hash
+        click.echo(f'Building docker image {image_name}:{version_tag}')
+        image, _logs = client.images.build(
+            path=build_path,
+            dockerfile=dockerfile,
+            tag=f'{image_name}:{version_tag}')
+        click.echo('Done')
+
+        remote_container_repo = remote_container_repo or \
+            os.path.join(
+                DEFAULT_REMOTE_CONTAINER_REPO_HOST,
+                get_config('gcp_project_id'))
+        remote_tag = os.path.join(
+            remote_container_repo,
+            f'{image_name}:{version_tag}')
+        image.tag(remote_tag)
+        latest_tag = os.path.join(
+            remote_container_repo,
+            f'{image_name}:LATEST')
+        image.tag(latest_tag)
+        click.echo(f'Pushing images to {remote_container_repo}')
+        click.echo('\t' + remote_tag)
+        click.echo('\t' + latest_tag)
+        client.images.push(remote_tag)
+        client.images.push(latest_tag)
+        click.echo('Done')

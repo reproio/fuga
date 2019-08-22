@@ -8,7 +8,8 @@ from fuga.cli.experiment import (
     ExperimentNewCommand,
     ExperimentDeployCommand)
 from fuga.cli.pod_operator import (
-    PodOperatorNewCommand)
+    PodOperatorNewCommand,
+    PodOperatorDeployCommand)
 from fuga.cli.init import (
     InitCommand)
 
@@ -40,6 +41,13 @@ def pod_operator():
 @click.argument('operator_name')
 def pod_operator_generate(operator_name):
     return PodOperatorNewCommand().run(
+        operator_name=operator_name)
+
+
+@pod_operator.command(name='deploy')
+@click.argument('operator_name')
+def pod_operator_deploy(operator_name):
+    return PodOperatorDeployCommand().run(
         operator_name=operator_name)
 
 

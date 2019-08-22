@@ -2,9 +2,9 @@
 
 Fuga is a toolset (and API wrappers) for Google Cloud Composer (Airflow).
 
-## Quickstart (WIP)
+## Quickstart
 
-### Requirements (WIP)
+### Requirements
 
 - gcloud cli tool
 - google cloud sdk
@@ -14,6 +14,13 @@ Fuga is a toolset (and API wrappers) for Google Cloud Composer (Airflow).
 
 Creating new Cloud Composer Environment is not supported by the tool at
 the moment.
+
+### Install fuga to Composer Environment
+
+You need to install fuga to Compooser Environment if you want to use
+fuga airflow utilities.
+
+<img src="https://cdn-ak.f.st-hatena.com/images/fotolife/a/ayemos/20190822/20190822175602.jpg" width="70%">
 
 ### Initialize Fuga environment
 

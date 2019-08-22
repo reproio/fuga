@@ -36,7 +36,7 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="XXX: Fuga",
+    description="Fuga",
     entry_points={
         'console_scripts': [
             'fuga=fuga.cli:main',
@@ -44,15 +44,17 @@ setup(
     },
     install_requires=requirements,
     license="MIT license",
+    description_content_type="text/markdown",
     long_description=readme,
+    long_description_content_type="text/markdown",
     include_package_data=True,
     keywords='fuga',
     name='fuga',
-    packages=find_packages(include=['fuga']),
+    packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/ayemos/fuga',
-    version='0.1.0',
+    version='0.1.1',
     zip_safe=False,
 )

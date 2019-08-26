@@ -4,11 +4,16 @@ Fuga is a toolset (and API wrappers) for Google Cloud Composer (Airflow).
 
 ## Quickstart
 
-### Requirements
+### Install Requirements
 
-- gcloud cli tool
-- google cloud sdk
-- hogehoge
+- [gcloud](https://cloud.google.com/sdk/docs/quickstarts)
+- Python 3+
+
+Note: pyenv always provides an entrypoint for both python2/3 and throw an
+error when one doesn't actually exists, which makes gcloud cli crashes at its
+runtime. To prevent this, use something like `pyenv global 3.x.x 2.x.x` to
+provide both python2/3 or `alias python2=python` to let your system choose
+where to route the command.
 
 ### Create Cloud Composer Environment
 

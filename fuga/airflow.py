@@ -252,12 +252,14 @@ def get_export_table_operator(table_name, dag=None):
 
 
 def get_dag(start_date=None, schedule_interval=None, **xargs):
+    default_args = {
+        'start_date': start_date or dt.datetime.today(),
+        'retries': 1,
+        'email_on_failure': True}.items()}
+    if models.Variable.get("notification_email_address", None) is not None:
+        defaualt_args['email'] = models.Variable.get("notification_email_address")
     default_dag_args = dict(itertools.chain(
-        {
-            'start_date': start_date or dt.datetime.today(),
-            'retries': 1,
-            'email': models.Variable.get("notification_email_address"),
-            'email_on_failure': True}.items(),
+        default_args.items(),
         xargs.items()))
 
     return models.DAG(

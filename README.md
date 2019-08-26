@@ -1,6 +1,8 @@
-# Fuga
+(This project is in public-beta status)
 
-[![pypi](https://img.shields.io/pypi/v/python_boilerplate.svg)](https://pypi.python.org/pypi/fuga)
+# Fuga \['fu:ga\]
+
+[![pypi](https://img.shields.io/pypi/v/fuga.svg)](https://pypi.python.org/pypi/fuga)
 [![CircleCI](https://circleci.com/gh/reproio/fuga.svg?style=svg)](https://circleci.com/gh/reproio/fuga)
 [![Documentation Status](https://readthedocs.org/projects/reproiofuga/badge/?version=latest)](https://reproiofuga.readthedocs.io/en/latest/?badge=latest)
 

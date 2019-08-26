@@ -1,0 +1,14 @@
+# vim: ft=Dockerfile
+
+FROM circleci/python:3.6.8
+
+RUN mkdir -p /home/circleci/repo/venv
+
+WORKDIR /home/circleci/repo
+ADD . /home/circleci/repo
+
+RUN python3 -m venv venv
+
+COPY build_entrypoint.sh /usr/local/bin
+RUN chmod +x /usr/local/bin/build_entrypoint.sh
+ENTRYPOINT ["build_entrypoint.sh"]

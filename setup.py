@@ -25,19 +25,14 @@ setup(
     author="Yuichiro Someya",
     author_email='me@ayemos.me',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
     ],
-    description="Fuga",
+    description="Fuga - Helper toolset for Google Cloud Cimposer",
     entry_points={
         'console_scripts': [
             'fuga=fuga.cli:main',
@@ -55,6 +50,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/ayemos/fuga',
-    version='0.1.1',
+    version='0.1.2',
     zip_safe=False,
 )

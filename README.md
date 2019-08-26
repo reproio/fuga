@@ -1,6 +1,12 @@
 # Fuga
 
-Fuga is a toolset (and API wrappers) for Google Cloud Composer (Airflow).
+[![pypi](https://img.shields.io/pypi/v/python_boilerplate.svg)](https://pypi.python.org/pypi/fuga)
+[![CircleCI](https://circleci.com/gh/reproio/fuga.svg?style=svg)](https://circleci.com/gh/reproio/fuga)
+[![Documentation Status](https://readthedocs.org/projects/reproiofuga/badge/?version=latest)](https://reproiofuga.readthedocs.io/en/latest/?badge=latest)
+
+Fuga is a toolset (and API wrappers) for Google Cloud Composer (Airflow),
+which allows Composer users to develop/deploy workflows easier and in
+more organized way.
 
 ## Quickstart
 

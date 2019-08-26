@@ -53,16 +53,19 @@ $ fuga experiment deploy
 ```
 
 ### (optional) Create your implementation for KubernetesPodOperator
+
 If you want to use an operator with external dependency which is not
 able to be resolved using just PyPI packages, (e.g. MeCab) you may need
 to use KuberenetesPodOperator.
 
-Fuga supports generating a scaffold for KuberenetesPodOperator and deploy/rollback(WIP) it on Google Cloud Container Registry.
-
+Fuga supports generating a scaffold for KuberenetesPodOperator and
+deploy(and rollback(WIP)) it on Google Cloud Container Registry.
 
 ```
+$ cd my_experiment
 $ fuga pod-operator new my_pod_operator
+...
 $ fuga pod-operator deploy my_pod_operator
-```
+...
 ```
 

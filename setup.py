@@ -11,6 +11,7 @@ with open('README.md') as readme_file:
 requirements = [
     'Click>=6.0',
     'google-cloud-resource-manager~=0.29.1',
+    'google-cloud-storage~=1.18.0',
     'cookiecutter~=1.6.0',
     'GitPython~=2.1.11',
     'pyyaml~=4.2b1',  # pyyaml<=4.2 has a severe vulnerability

@@ -30,7 +30,7 @@ DEFAULT_REMOTE_CONTAINER_REPO_HOST = 'gcr.io'
 class PodOperatorNewCommand:
     # XXX: Temporary location for templates
     DEFAULT_TEMPLATE_REPO = os.path.expanduser(
-        '~/.cookiecutters/fuga-pod-operator-tmp')
+        '~/.cookiecutters/fuga-cookiecutter-pod-operator-default')
 
     def __init__(self):
         pass

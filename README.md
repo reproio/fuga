@@ -23,6 +23,19 @@ runtime. To prevent this, use something like `pyenv global 3.x.x 2.x.x` to
 provide both python2/3 or `alias python2=python` to let your system choose
 where to route the command.
 
+### Install fuga templates
+
+Fuga powers [cookiecutter](https://github.com/cookiecutter/cookiecuttering) to offer various templates/boilerplates to be run on Google Cloud Composer
+environments.
+You need to install it to your environment before using fuga.
+
+```
+$ git clone git@github.com:reproio/fuga-cookiecutter-experiment-default.git \
+  ~/.cookiecutters/fuga-cookiecutter-experiment-default
+$ git clone git@github.com:reproio/fuga-cookiecutter-pod-operator-default.git \
+  ~/.cookiecutters/fuga-cookiecutter-pod-operator-default
+```
+
 ### Create Cloud Composer Environment
 
 Creating new Cloud Composer Environment is not supported by the tool at

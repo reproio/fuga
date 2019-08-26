@@ -28,7 +28,7 @@ from cookiecutter.exceptions import (
 class ExperimentNewCommand:
     # XXX: Temporary location for templates
     DEFAULT_TEMPLATE_REPO = os.path.expanduser(
-        '~/.cookiecutters/fuga-experiment-tmp')
+        '~/.cookiecutters/fuga-cookiecutter-experiment-default')
 
     def run(
             self,

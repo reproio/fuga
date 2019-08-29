@@ -17,7 +17,7 @@ class Client(ClientWithProject):
     """
 
     SCOPE = (
-        "https://www.googleapis.com/auth/cloud-platform"
+        "https://www.googleapis.com/auth/cloud-platform",
     )
 
     def __init__(self, project=_marker, credentials=None, _http=None, client_info=None):

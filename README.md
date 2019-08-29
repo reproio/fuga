@@ -23,10 +23,17 @@ runtime. To prevent this, use something like `pyenv global 3.x.x 2.x.x` to
 provide both python2/3 or `alias python2=python` to let your system choose
 where to route the command.
 
+### Install fuga (cli)
+
+```
+$ # (on your own machine)
+$ pip install fuga
+```
+
 ### Install fuga templates
 
-Fuga powers [cookiecutter](https://github.com/cookiecutter/cookiecuttering) to offer various templates/boilerplates to be run on Google Cloud Composer
-environments.
+Fuga powers [cookiecutter](https://github.com/cookiecutter/cookiecuttering) to offer various
+templates/boilerplates for fuga experiments.
 You need to install it to your environment before using fuga.
 
 ```

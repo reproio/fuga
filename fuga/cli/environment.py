@@ -178,10 +178,12 @@ Please choose a GCS bucket to use with fuga.
                     EnvironmentInitCommand._STORAGE_LOCATIONS[
                         location_choice - 1]
                 # XXX: bucket.storage_class = "COLDLINE"
+                # TODO: catch google exception conflict 409 errors
                 bucket.create(
                     storage_client,
                     project=project.project_id,
                     location=location)
+                click.echo(f'Created a bucket "{bucket_name}"')
 
         return bucket
 
@@ -191,7 +193,8 @@ Please choose a GCS bucket to use with fuga.
 
         environment = None
         candidates = []
-        for candidate_environment in composer_client.list_environments():
+        for candidate_environment in \
+                composer_client.list_environments(location=location):
             candidates.append(candidate_environment)
 
             # XXX: Support creating environment

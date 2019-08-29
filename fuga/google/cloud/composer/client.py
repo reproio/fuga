@@ -50,6 +50,7 @@ class Client(ClientWithProject):
 
     def list_environments(
             self,
+            location,
             max_results=None,
             page_token=None,
             prefix=None,
@@ -67,7 +68,7 @@ class Client(ClientWithProject):
         return page_iterator.HTTPIterator(
             client=self,
             api_request=self._connection.api_request,
-            path="/projects/repro-lab/locations/asia-northeast1/environments",
+            path=f'/projects/{project.project_id}/locations/{location}/environments',
             items_key='environments',
             item_to_value=_item_to_environment,
             page_token=page_token,

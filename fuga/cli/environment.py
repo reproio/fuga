@@ -189,7 +189,7 @@ Please choose a GCS bucket to use with fuga.
 
     def _setup_composer_environment(self, project, location):
         environments_per_page = 10
-        composer_client = composer.Client()
+        composer_client = composer.Client(project=project)
 
         environment = None
         candidates = []

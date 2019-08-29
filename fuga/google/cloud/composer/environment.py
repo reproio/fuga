@@ -86,7 +86,6 @@ class Environment:
         return environment
 
     def set_properties_from_api_repr(self, resource):
-        print(resource)
         self.state = resource['state']
         self.config = resource['config']
 

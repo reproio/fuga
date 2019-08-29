@@ -1,7 +1,5 @@
 import click
 
-from fuga.cli.deploy import (
-    DeployCommand)
 from fuga.cli.environment import (
     EnvironmentInitCommand)
 from fuga.cli.experiment import (
@@ -10,8 +8,6 @@ from fuga.cli.experiment import (
 from fuga.cli.pod_operator import (
     PodOperatorNewCommand,
     PodOperatorDeployCommand)
-from fuga.cli.init import (
-    InitCommand)
 
 
 @click.group()
@@ -25,16 +21,9 @@ def main(args=None):
     '''
 
 
-@main.command()
-@click.argument('experiment_name')
-def init(experiment_name):
-    return InitCommand().run(
-        experiment_name=experiment_name)
-
-
 @main.group()
 def pod_operator():
-    print('pod_operator')
+    pass
 
 
 @pod_operator.command(name='new')
@@ -51,14 +40,9 @@ def pod_operator_deploy(operator_name):
         operator_name=operator_name)
 
 
-@main.command()
-def deploy():
-    return DeployCommand().run()
-
-
 @main.group()
 def environment():
-    print('environment')
+    pass
 
 
 @environment.command(name='init')

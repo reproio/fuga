@@ -3,7 +3,6 @@
 
 from google.api_core import page_iterator
 from google.cloud.client import ClientWithProject
-from google.cloud.resource_manager.project import Project
 
 from fuga.google.cloud.composer._http import Connection
 from fuga.google.cloud.composer import Environment
@@ -31,6 +30,7 @@ class Client(ClientWithProject):
         )
         self._base_connection = None
         self.project = project
+
         self._connection = Connection(self, client_info=client_info)
 
     def environment(self, environment_name):
@@ -62,17 +62,10 @@ class Client(ClientWithProject):
         if project is None:
             raise ValueError("Client project not set:  pass an explicit project.")
 
-        if isinstance(project, str):
-            project_id = project
-        elif isinstance(project, Project):
-            project_id = project.project_id
-        else:
-            raise Exception(f'Unexpected type of project: {type(project)}')
-
         return page_iterator.HTTPIterator(
             client=self,
             api_request=self._connection.api_request,
-            path=f'/projects/{project_id}/locations/{location}/environments',
+            path=f'/projects/{project}/locations/{location}/environments',
             items_key='environments',
             item_to_value=_item_to_environment,
             page_token=page_token,

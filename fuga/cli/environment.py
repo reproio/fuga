@@ -2,9 +2,24 @@ import re
 
 import click
 from google.cloud import resource_manager, storage
+from google.api_core.exceptions import Forbidden
 
 from fuga.config import get_config, write_config
 from fuga.google.cloud import composer
+
+
+def _call_api_with_credentials_catch(f, *args, **kwargs):
+    try:
+        return f(*args, **kwargs)
+    except Forbidden as e:
+        click.echo('Fuga has encountered a credential related error during an api call to GCP.')
+        click.echo('Please check your authentication settings. ')
+        click.echo(
+            'hint: an explicit credential (`GOOGLE_APPLICATION_CREDENTIALS`) would '
+            'precedes one configured with gcloud.')
+        click.echo('(Original error message: ' + e.message + ')')
+        import sys
+        sys.exit(1)
 
 
 class EnvironmentInitCommand:
@@ -35,7 +50,8 @@ class EnvironmentInitCommand:
 
     def _setup_gcp_project(self):
         resource_manager_client = resource_manager.Client()
-        projects = list(resource_manager_client.list_projects())
+        projects = list(
+            _call_api_with_credentials_catch(resource_manager_client.list_projects))
 
         if len(projects) > 0:
             # Let user choose a project to use
@@ -60,8 +76,8 @@ Please choose a GCP project to use with fuga.
                     'Please choose a project id',
                     type=int,
                     default=re.sub(r'\s+', '_', project_name).lower())
-                project = resource_manager_client.new_project(
-                    project_id, name=project_name)
+                project = _call_api_with_credentials_catch(
+                    resource_manager_client.new_project, project_id, name=project_name)
                 project.create()
         else:
             # Ask user if he/she wants to create new GCP project
@@ -75,8 +91,8 @@ Please choose a GCP project to use with fuga.
                     'Please choose a project id',
                     type=int,
                     default=re.sub(r'\s+', '_', project_name).lower())
-                project = resource_manager_client.new_project(
-                    project_id, name=project_name)
+                project = _call_api_with_credentials_catch(
+                    resource_manager_client.new_project, project_id, name=project_name)
                 project.create()
             else:
                 import sys
@@ -90,7 +106,8 @@ Please choose a GCP project to use with fuga.
         buckets_per_page = 10
         candidates = []
         bucket = None
-        for candidate_bucket in storage_client.list_buckets():
+        for candidate_bucket in _call_api_with_credentials_catch(
+                storage_client.list_buckets):
             candidates.append(candidate_bucket)
 
             if len(candidates) >= buckets_per_page:
@@ -194,7 +211,7 @@ Please choose a GCS bucket to use with fuga.
         environment = None
         candidates = []
         for candidate_environment in \
-                composer_client.list_environments(location=location):
+                _call_api_with_credentials_catch(composer_client.list_environments, location=location):
             candidates.append(candidate_environment)
 
             # XXX: Support creating environment
@@ -249,7 +266,8 @@ Please choose a Cloud Composer Environment to use with fuga.
         config_overrides = {}
         if get_config('gcp_project_id'):
             resource_manager_client = resource_manager.Client()
-            project = resource_manager_client.fetch_project(
+            project = _call_api_with_credentials_catch(
+                resource_manager_client.fetch_project,
                 get_config('gcp_project_id'))
         else:
             project = self._setup_gcp_project()
@@ -257,16 +275,16 @@ Please choose a Cloud Composer Environment to use with fuga.
 
         if get_config('gcs_bucket_name'):
             storage_client = storage.Client(project=project.project_id)
-            bucket = storage_client.get_bucket(
-                get_config('gcs_bucket_name'))
+            bucket = _call_api_with_credentials_catch(
+                storage_client.get_bucket, get_config('gcs_bucket_name'))
         else:
             bucket = self._setup_gcs_bucket(project)
             config_overrides['gcs_bucket_name'] = bucket.name
 
         if get_config('composer_environment_full_path'):
             composer_client = composer.Client(project=project.project_id)
-            environment = composer_client.get_environment(
-                get_config('composer_environment_full_path'))
+            environment = _call_api_with_credentials_catch(
+                composer_client.get_environment, get_config('composer_environment_full_path'))
         else:
             environment = self._setup_composer_environment(
                 project,
